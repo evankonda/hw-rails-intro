@@ -8,7 +8,12 @@ class MoviesController < ApplicationController
   
     def index
       @movies = Movie.all
-      
+      if @sort_method == "title"
+        @movies = @movies.order(@sort_method)
+        @sort_title = 'hilite'
+      elsif @sort_method == "rd"
+        @movies = @movies.order(@sort_method)
+        @sort_rd = 'hilite'
     end
   
     def new
