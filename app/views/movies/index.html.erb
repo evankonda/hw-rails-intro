@@ -6,7 +6,7 @@
 <table class="table table-striped col-md-12" id="movies">
   <thead>
     <tr>
-      <th>Movie Title</th>
+      <th>{:class => @s_title, :id => "title_header"} = link_to "Movie Title", movies_path(:sorting => 'title')</th>
       <th>Rating</th>
       <th>Release Date</th>
       <th>More Info</th>
