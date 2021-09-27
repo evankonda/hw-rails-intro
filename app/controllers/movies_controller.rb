@@ -14,6 +14,7 @@ class MoviesController < ApplicationController
       elsif @sort_method == "rd"
         @movies = @movies.order(@sort_method)
         @sort_rd = 'hilite'
+      end
     end
   
     def new
