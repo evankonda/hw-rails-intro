@@ -14,7 +14,7 @@ class MoviesController < ApplicationController
         @sort_title = 'hilite', 'bg-warning'
       elsif @sorter == "release_date"
         @movies = @movies.order(@sorter)
-        @sort_rd = 'hilite', bgcolor = "yellow"
+        @sort_rd = 'hilite', 'bg-warning'
       end
     end
   
