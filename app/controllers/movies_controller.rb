@@ -11,10 +11,10 @@ class MoviesController < ApplicationController
       @sorter = params[:sort_method]
       if @sorter == "title"
         @movies = @movies.order(@sorter)
-        @sort_title = "p-3 mb-2 bg-warning hilite"
+        @sort_title = "bg-warning hilite"
       elsif @sorter == "release_date"
         @movies = @movies.order(@sorter)
-        @sort_rd = "p-3 mb-2 bg-warning hilite"
+        @sort_rd = "bg-warning hilite"
       end
     end
   
