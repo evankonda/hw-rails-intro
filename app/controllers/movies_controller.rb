@@ -17,6 +17,10 @@ class MoviesController < ApplicationController
         @sort_rd = "bg-warning hilite"
       end
     end
+    
+    def all_ratings
+      @all_ratings = Movie.all_ratings
+    end
   
     def new
       # default: render 'new' template
