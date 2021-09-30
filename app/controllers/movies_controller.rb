@@ -7,6 +7,7 @@ class MoviesController < ApplicationController
     end
   
     def index
+      @all_ratings = Movie.all_ratings
       @movies = Movie.all
       @sorter = params[:sort_method]
       if @sorter == "title"
@@ -16,10 +17,6 @@ class MoviesController < ApplicationController
         @movies = @movies.order(@sorter)
         @sort_rd = "bg-warning hilite"
       end
-    end
-    
-    def all_ratings
-      @all_ratings = Movie.all_ratings
     end
   
     def new
