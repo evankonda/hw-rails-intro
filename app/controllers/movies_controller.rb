@@ -7,15 +7,22 @@ class MoviesController < ApplicationController
     end
   
     def index
+      # general all ratings for index html
       @all_ratings = Movie.all_ratings
-      @movies = Movie.all
+      
+      # set movies to check boxed movies
+      @checked = params[:ratings]
+      @movies = Movie.where(rating: @checked.keys)
+      
+      # get sorting method
       @sorter = params[:sort_method]
-      if @sorter == "title"
+      # sort by sorting method and do coloring
+      if @sorter == 'title'
         @movies = @movies.order(@sorter)
-        @sort_title = "bg-warning hilite"
-      elsif @sorter == "release_date"
+        @sort_title = "hilite bg-warning"
+      elsif @sorter == 'release_date'
         @movies = @movies.order(@sorter)
-        @sort_rd = "bg-warning hilite"
+        @sort_rd = "hilight bg-warning"
       end
     end
   
