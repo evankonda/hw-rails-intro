@@ -24,6 +24,9 @@ class MoviesController < ApplicationController
         @movies = @movies.order(@sorter)
         @sort_rd = "hilight bg-warning"
       end
+      
+      # set for refresh
+      @checked_ratings = @checked
     end
   
     def new
