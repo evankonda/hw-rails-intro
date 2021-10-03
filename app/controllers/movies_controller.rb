@@ -9,39 +9,32 @@ class MoviesController < ApplicationController
     def index
       # general all ratings for index html
       @all_ratings = Movie.all_ratings
+      # set heading coloring options to false 
+      @coloring_title, @coloring_rd = false, false
       
-      # set movies to check boxed movies or session
-      @checked = params[:ratings] || session[:ratings]
-      # if checkboxes ar emtpy, set to all movies
-      if @checked == nil
-        @checked = Movie.all_ratings
-        session[:ratings] = @checked
-      # if the a session does not match the current parameters, reset session
+      # set movies to check boxed movies
+      if params.has_key?(:ratings)
+        @checked = params[:ratings]
+        @movies = Movie.where(rating: @checked.keys)
+        @checked_ratings = @checked
       else
-        # no match in sort method?
-        if session[:sort_method] != params[:sort_method]
-          session[:sort_method] = params[:sort_method] || session[:sort_method]
-        # no match in ratings checkbox?
-        elsif session[:ratings] != params[:ratings]
-          session[:ratings] = @checked
-        end
-        # redirect to new URI containing updated parameters
-        redirect_to :sort_method => session[:sort_method], :ratings => @checked
+        @checked_ratings = @all_ratings
+        @movies = Movie.all
       end
-        
+      
       # get sorting method
-      @sorter = params[:sort_method] || session[:sort_method]
+      @sorter = params[:sort_method]
       # sort by sorting method and do coloring
       if @sorter == 'title'
         @movies = @movies.order(@sorter)
-        @sort_title = "hilite bg-warning"
+        @coloring_title = true
       elsif @sorter == 'release_date'
         @movies = @movies.order(@sorter)
-        @sort_rd = "hilight bg-warning"
+        @coloring_rd = true
       end
+  
+
       
-      # will keep same rating upon refresh
-      @checked_ratings = @checked
     end
   
     def new
