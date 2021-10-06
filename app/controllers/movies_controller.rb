@@ -9,39 +9,46 @@ class MoviesController < ApplicationController
     def index
       # general all ratings for index html
       @all_ratings = Movie.all_ratings
+      # set heading coloring options to false 
+      @coloring_title, @coloring_rd = false, false
       
-      # set movies to check boxed movies or session
-      @checked = params[:ratings] || session[:ratings]
-      # if checkboxes ar emtpy, set to all movies
-      if @checked == nil
-        @checked = Movie.all_ratings
-        session[:ratings] = @checked
-      # if the a session does not match the current parameters, reset session
-      else
-        # no match in sort method?
-        if session[:sort_method] != params[:sort_method]
-          session[:sort_method] = params[:sort_method] || session[:sort_method]
-        # no match in ratings checkbox?
-        elsif session[:ratings] != params[:ratings]
-          session[:ratings] = @checked
+      # Ratings
+      # if either params or session has ratings
+      if params.has_key?(:ratings) || session.has_key?(:ratings)
+        # set checked to params. If no params, them to session
+        @checked = params[:ratings] || session[:ratings]
+        @movies = Movie.where(rating: @checked.keys)
+        @checked_ratings = @checked
+        if !params.has_key?(:ratings)
+          params[:ratings] = @checked # no params, session is current values
+        else
+          session[:ratings] = params[:ratings] # params exist, session is params
         end
-        # redirect to new URI containing updated parameters
-        redirect_to :sort_method => session[:sort_method], :ratings => @checked
-      end
-        
-      # get sorting method
-      @sorter = params[:sort_method] || session[:sort_method]
-      # sort by sorting method and do coloring
-      if @sorter == 'title'
-        @movies = @movies.order(@sorter)
-        @sort_title = "hilite bg-warning"
-      elsif @sorter == 'release_date'
-        @movies = @movies.order(@sorter)
-        @sort_rd = "hilight bg-warning"
+      else
+        @checked_ratings = @all_ratings
+        @movies = Movie.all
       end
       
-      # will keep same rating upon refresh
-      @checked_ratings = @checked
+      # Title Sorting
+      # same methodology as above
+      if params.has_key?(:sort_method) || session.has_key?(:sort_method)
+        @sorter = params[:sort_method] || session[:sort_method]
+        @movies = @movies.order(@sorter)
+        # set sorting table header colors
+        if @sorter == 'title'
+          @coloring_title = true
+        elsif @sorter == 'release_date'
+          @coloring_rd = true
+        end
+        if !params.has_key?(:sort_method)
+          params[:sort_method] = @sorter
+        else
+          session[:sort_method] = params[:sort_method]
+        end
+      else
+        @movies = @movies
+      end
+    
     end
   
     def new
